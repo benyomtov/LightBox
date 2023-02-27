@@ -85,8 +85,8 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
 
   const styles = {
     font: {
-      fontFamily: "Rampart One, cursive",
-      fontSize: "3vw",
+      fontFamily: "Azeret Mono, monospace",
+      fontSize: "1vw",
       color: `${color}`,
       textShadow: `5px 5px 10px ${shadowColor}`,
       border: `3px solid ${color}`,
@@ -100,85 +100,82 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
 
     colorPicker: {
       border: `3px solid ${color}`,
-      width: "4vw",
+    //   width: "10vw",
       height: "3vw",
+
       borderRadius: "10px",
     },
   };
   return (
     <div>
+      <div className="fixed-top col-2 h-100" style={styles.background}>
+        <div className="m-3 row">
+          <div className="row">
+            <p className="text-center" style={styles.font}>
+              Line Color:{" "}
+              <input
+                id="color-picker"
+                type="color"
+                value={lineColor}
+                style={styles.colorPicker}
+                className="m-2 w-75"
+                onChange={(e) => setLineColor(e.target.value)}
+              />
+            </p>
+          </div>
+          <div className="row">
+            <p className="text-center" style={styles.font}>
+              Line Thickness:{" "}
+              <input
+                id="thickness-picker"
+                type="range"
+                value={lineThickness}
+                style={styles.colorPicker}
+                className="m-2 w-75"
+                onChange={(e) => setLineThickness(e.target.value)}
+              />
+            </p>
+          </div>
+          <div className="row">
+            <p className="text-center" style={styles.font}>
+              Glow Color:{" "}
+              <input
+                id="glow-picker"
+                type="color"
+                value={glowColor}
+                style={styles.colorPicker}
+                className="m-2 w-75"
+                onChange={(e) => setGlowColor(e.target.value)}
+              />
+            </p>
+          </div>
+          <div className="row">
+            <p className="text-center" style={styles.font}>
+              Glow Blur:{" "}
+              <input
+                id="-glow-blur-picker"
+                type="range"
+                value={glowBlur}
+                style={styles.colorPicker}
+                className="m-2 w-75"
+                onChange={(e) => setGlowBlur(e.target.value)}
+              />
+            </p>
+          </div>
+        </div>
+      </div>
       <canvas
         ref={canvasRef}
         width={window.innerWidth}
         height={window.innerHeight}
         style={{
           backgroundColor: "black",
-          position: "absolute",
           top: 0,
           left: 0,
           zIndex: -1,
+          position: "absolute",
         }}
       />
-
-      <div className="row" style={styles.background}>
-        <div className="m-3 col-4">
-            <div className="row">
-                <p className="text-center" style={styles.font}>
-                Choose a color:{" "}
-                <input
-                id="color-picker"
-                type="color"
-                value={lineColor}
-                style={styles.colorPicker}
-                className="m-2"
-                onChange={(e) => setLineColor(e.target.value)}
-                />
-                </p>
-            </div>  
-            <div className="row">
-                <p className="text-center" style={styles.font}>
-                Choose a thickness:{" "}
-                <input
-                id="thickness-picker"
-                type="range"
-                value={lineThickness}
-                style={styles.colorPicker}
-                className="m-2"
-                onChange={(e) => setLineThickness(e.target.value)}
-                />
-                </p>
-            </div> 
-          
-        </div>
-        <div className="m-3 col-4">
-            <div className="row">
-                <p className="text-center" style={styles.font}>
-                Choose a glow color:{" "}
-                <input
-                id="glow-picker"
-                type="color"
-                value={glowColor}
-                style={styles.colorPicker}
-                className="m-2"
-                onChange={(e) => setGlowColor(e.target.value)}
-                />
-                </p>
-            </div>
-            <div className="row">
-                <p className="text-center" style={styles.font}>
-                Choose a glow blur:{" "}
-                <input
-                id="-glow-blur-picker"
-                type="range"
-                value={glowBlur}
-                style={styles.colorPicker}
-                className="m-2"
-                onChange={(e) => setGlowBlur(e.target.value)}
-                />
-                </p>
-            </div> 
-        </div>
-    </div>
     </div>
   );
 }
