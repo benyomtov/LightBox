@@ -5,22 +5,30 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastX, setLastX] = useState(0);
   const [lastY, setLastY] = useState(0);
-  const [lineColor, setLineColor] = useState("black");
-  const [glowColor, setGlowColor] = useState("black");
+  const [lineColor, setLineColor] = useState("#000000");
+  const [glowColor, setGlowColor] = useState("#000000");
   const [lineThickness, setLineThickness] = useState(50);
   const [glowBlur, setGlowBlur] = useState(15);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-
-    let alpha = 0.1;
-
-    const interval = setInterval(() => {
-      context.fillStyle = `rgba(0, 0, 0, ${alpha})`;
-      context.fillRect(0, 0, canvas.width, canvas.height);
-    }, 200);
-  }, []);
+    let interval = null;
+  
+    if (!paused) {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+      const alpha = 0.1;
+  
+      interval = setInterval(() => {
+        context.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+      }, 200);
+    }
+  
+    return () => {
+      clearInterval(interval);
+    };
+  }, [paused]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -162,6 +170,19 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
               />
             </p>
           </div>
+            <div className="row">
+            <p className="text-center" style={styles.font}>
+                Pause:{" "}
+                <input
+                id="pause"
+                type="checkbox"
+                style={styles.colorPicker}
+                className="m-2 w-75"
+                onChange={(e) => {setPaused(e.target.checked);
+                console.log(e.target.checked);}}
+                />
+            </p>
+            </div>
         </div>
       </div>
       <canvas
@@ -169,7 +190,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
         width={window.innerWidth}
         height={window.innerHeight}
         style={{
-          backgroundColor: "black",
+          backgroundColor: "#000000",
           top: 0,
           left: 0,
           zIndex: -1,
