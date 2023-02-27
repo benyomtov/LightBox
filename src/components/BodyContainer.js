@@ -7,6 +7,8 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
   const [lastY, setLastY] = useState(0);
   const [lineColor, setLineColor] = useState("black");
   const [glowColor, setGlowColor] = useState("black");
+  const [lineThickness, setLineThickness] = useState(50);
+  const [glowBlur, setGlowBlur] = useState(15);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -24,11 +26,11 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     context.strokeStyle = lineColor;
-    context.lineWidth = 50;
+    context.lineWidth = lineThickness;
     context.lineCap = "round";
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
-    context.shadowBlur = 15;
+    context.shadowBlur = glowBlur;
     context.shadowColor = glowColor;
 
     function draw(e) {
@@ -56,7 +58,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
         setLastY(e.offsetY);
       });
     };
-  }, [lineColor, glowColor]);
+  }, [lineColor, glowColor, lineThickness, glowBlur]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -120,32 +122,63 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
 
       <div className="row" style={styles.background}>
         <div className="m-3 col-4">
-          <p className="text-center" style={styles.font}>
-            Choose a color:{" "}
-            <input
-              id="color-picker"
-              type="color"
-              value={lineColor}
-              style={styles.colorPicker}
-              className="m-2"
-              onChange={(e) => setLineColor(e.target.value)}
-            />
-          </p>
+            <div className="row">
+                <p className="text-center" style={styles.font}>
+                Choose a color:{" "}
+                <input
+                id="color-picker"
+                type="color"
+                value={lineColor}
+                style={styles.colorPicker}
+                className="m-2"
+                onChange={(e) => setLineColor(e.target.value)}
+                />
+                </p>
+            </div>  
+            <div className="row">
+                <p className="text-center" style={styles.font}>
+                Choose a thickness:{" "}
+                <input
+                id="thickness-picker"
+                type="range"
+                value={lineThickness}
+                style={styles.colorPicker}
+                className="m-2"
+                onChange={(e) => setLineThickness(e.target.value)}
+                />
+                </p>
+            </div> 
+          
         </div>
         <div className="m-3 col-4">
-          <p className="text-center" style={styles.font}>
-            Choose a glow color:{" "}
-            <input
-              id="glow-picker"
-              type="color"
-              value={glowColor}
-              style={styles.colorPicker}
-              className="m-2"
-              onChange={(e) => setGlowColor(e.target.value)}
-            />
-          </p>
+            <div className="row">
+                <p className="text-center" style={styles.font}>
+                Choose a glow color:{" "}
+                <input
+                id="glow-picker"
+                type="color"
+                value={glowColor}
+                style={styles.colorPicker}
+                className="m-2"
+                onChange={(e) => setGlowColor(e.target.value)}
+                />
+                </p>
+            </div>
+            <div className="row">
+                <p className="text-center" style={styles.font}>
+                Choose a glow blur:{" "}
+                <input
+                id="-glow-blur-picker"
+                type="range"
+                value={glowBlur}
+                style={styles.colorPicker}
+                className="m-2"
+                onChange={(e) => setGlowBlur(e.target.value)}
+                />
+                </p>
+            </div> 
         </div>
-      </div>
+    </div>
     </div>
   );
 }
