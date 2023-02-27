@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.c2cab247.css",
-    "main.js": "/static/js/main.497ee03a.js",
-    "index.html": "/index.html",
-    "main.c2cab247.css.map": "/static/css/main.c2cab247.css.map",
-    "main.497ee03a.js.map": "/static/js/main.497ee03a.js.map"
+    "main.css": "/yomtov-portfolio/static/css/main.c2cab247.css",
+    "main.js": "/yomtov-portfolio/static/js/main.497ee03a.js",
+    "index.html": "/yomtov-portfolio/index.html",
+    "main.c2cab247.css.map": "/yomtov-portfolio/static/css/main.c2cab247.css.map",
+    "main.497ee03a.js.map": "/yomtov-portfolio/static/js/main.497ee03a.js.map"
   },
   "entrypoints": [
     "static/css/main.c2cab247.css",
