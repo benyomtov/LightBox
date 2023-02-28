@@ -12,7 +12,6 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
   const [paused, setPaused] = useState(false);
   const [drawMode, setDrawMode] = useState(false);
   const [brushShape, setBrushShape] = useState("round");
-    const [previousFile, setPreviousFile] = useState(null);
 
     const handleDownload = () => {
 
@@ -145,47 +144,6 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
     brushShape,
   ]);
 
-  // canvas.addEventListener("mouseenter", (e) => {
-  //   setIsDrawing(true);
-  //   setLastX(e.offsetX);
-  //   setLastY(e.offsetY);
-  // });
-
-  // canvas.addEventListener("mousemove", draw);
-
-  // return () => {
-  //   canvas.removeEventListener("mouseenter", (e) => {
-  //     setIsDrawing(true);
-  //     setLastX(e.offsetX);
-  //     setLastY(e.offsetY);
-  //   });
-
-  //     canvas.removeEventListener("mousemove", draw);
-  // };
-
-  //   useEffect(() => {
-  //     const canvas = canvasRef.current;
-  //     const context = canvas.getContext("2d");
-
-  //     function draw(e) {
-  //       if (!isDrawing) return;
-  //       if (e.type === "mousemove") {
-  //         context.beginPath();
-  //         context.moveTo(lastX, lastY);
-  //         context.lineTo(e.offsetX, e.offsetY);
-  //         context.stroke();
-  //         setLastX(e.offsetX);
-  //         setLastY(e.offsetY);
-  //       }
-  //     }
-
-  //     canvas.addEventListener("mousemove", draw);
-
-  //     return () => {
-  //       canvas.removeEventListener("mousemove", draw);
-  //     };
-  //   }, [isDrawing, lastX, lastY]);
-
   const styles = {
     font: {
       fontFamily: "Azeret Mono, monospace",
@@ -212,7 +170,8 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
   return (
     <div>
         <div className="fixed-top col-2 h-100" style={styles.background}>
-          <div className="m-3 row" style={{ overflowY: "scroll", height: "100%"}}>
+            <h1 className="text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor }}>Tools:</h1>
+          <div className="m-3 row" style={{ overflowY: "scroll", height: "90%"}}>
             <div className="row">
               <p className="text-center" style={styles.font}>
                 Line Color:{" "}
@@ -315,7 +274,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
             </div>
             <div className="row">
               <p className="text-center" style={styles.font}>
-                <button className="btn btn-primary m-2 border-0" style={{ backgroundColor: color, boxShadow: `0 0 10px ${shadowColor}`, textShadow: "1px 1px 3px #000000" }} onClick={handleDownload}>
+                <button className="btn btn-primary container-fluid my-3 border-0" style={{ backgroundColor: color, boxShadow: `0 0 10px ${shadowColor}`, textShadow: "1px 1px 3px #000000" }} onClick={handleDownload}>
                     Download Image
                 </button>
               </p>
@@ -323,10 +282,9 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
             <div className="row">
                 <p className="text-center" style={styles.font}>
                     <input id="files" type="file" name="image-upload" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
-                    <label htmlFor="files" className="btn btn-primary m-2 border-0" style={{ backgroundColor: color, boxShadow: `0 0 10px ${shadowColor}`, textShadow: "1px 1px 3px #000000" }}>Upload Background</label>
+                    <label htmlFor="files" className="btn btn-primary container-fluid my-3 border-0" style={{ backgroundColor: color, boxShadow: `0 0 10px ${shadowColor}`, textShadow: "1px 1px 3px #000000" }}>Upload Background</label>
                 </p>
             </div>      
-
           </div>
         </div>
 
