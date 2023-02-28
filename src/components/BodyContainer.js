@@ -10,6 +10,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
   const [lineThickness, setLineThickness] = useState(50);
   const [glowBlur, setGlowBlur] = useState(15);
   const [paused, setPaused] = useState(false);
+  const [drawMode, setDrawMode] = useState(false);
 
   useEffect(() => {
     let interval = null;
@@ -40,10 +41,10 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
     context.shadowOffsetY = 0;
     context.shadowBlur = glowBlur;
     context.shadowColor = glowColor;
-
+  
     function draw(e) {
       if (!isDrawing) return;
-      if (e.type === "mousemove" || e.type === "mouseenter") {
+      if (e.type === "mousemove" || e.type === "mouseenter" || e.type === "mousedown") {
         context.beginPath();
         context.moveTo(lastX, lastY);
         context.lineTo(e.offsetX, e.offsetY);
@@ -52,44 +53,91 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
         setLastY(e.offsetY);
       }
     }
-
-    canvas.addEventListener("mouseenter", (e) => {
-      setIsDrawing(true);
-      setLastX(e.offsetX);
-      setLastY(e.offsetY);
-    });
-
-    return () => {
-      canvas.removeEventListener("mouseenter", (e) => {
+  
+    canvas.addEventListener("mouseenter", handleMouseEnter);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mouseup", handleMouseUp);
+    canvas.addEventListener("mouseout", handleMouseOut);
+  
+    function handleMouseEnter(e) {
+        if (!drawMode) {
+            setIsDrawing(true);
+            setLastX(e.offsetX);
+            setLastY(e.offsetY);
+        } else return;
+    }
+  
+    function handleMouseMove(e) {
+      draw(e);
+    }
+  
+    function handleMouseDown(e) {
+      if (drawMode) {
         setIsDrawing(true);
         setLastX(e.offsetX);
         setLastY(e.offsetY);
-      });
-    };
-  }, [lineColor, glowColor, lineThickness, glowBlur]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-
-    function draw(e) {
-      if (!isDrawing) return;
-      if (e.type === "mousemove") {
-        context.beginPath();
-        context.moveTo(lastX, lastY);
-        context.lineTo(e.offsetX, e.offsetY);
-        context.stroke();
-        setLastX(e.offsetX);
-        setLastY(e.offsetY);
-      }
+      } else return;
     }
-
-    canvas.addEventListener("mousemove", draw);
-
+  
+    function handleMouseUp() {
+      if (drawMode) setIsDrawing(false);
+    }
+  
+    function handleMouseOut() {
+      setIsDrawing(false);
+    }
+  
     return () => {
-      canvas.removeEventListener("mousemove", draw);
+      canvas.removeEventListener("mouseenter", handleMouseEnter);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("mouseout", handleMouseOut);
     };
-  }, [isDrawing, lastX, lastY]);
+  }, [lineColor, glowColor, lineThickness, glowBlur, isDrawing, lastX, lastY, drawMode]);
+
+    // canvas.addEventListener("mouseenter", (e) => {
+    //   setIsDrawing(true);
+    //   setLastX(e.offsetX);
+    //   setLastY(e.offsetY);
+    // });
+
+    // canvas.addEventListener("mousemove", draw);
+
+    // return () => {
+    //   canvas.removeEventListener("mouseenter", (e) => {
+    //     setIsDrawing(true);
+    //     setLastX(e.offsetX);
+    //     setLastY(e.offsetY);
+    //   });
+
+    //     canvas.removeEventListener("mousemove", draw);
+    // };
+
+
+//   useEffect(() => {
+//     const canvas = canvasRef.current;
+//     const context = canvas.getContext("2d");
+
+//     function draw(e) {
+//       if (!isDrawing) return;
+//       if (e.type === "mousemove") {
+//         context.beginPath();
+//         context.moveTo(lastX, lastY);
+//         context.lineTo(e.offsetX, e.offsetY);
+//         context.stroke();
+//         setLastX(e.offsetX);
+//         setLastY(e.offsetY);
+//       }
+//     }
+
+//     canvas.addEventListener("mousemove", draw);
+
+//     return () => {
+//       canvas.removeEventListener("mousemove", draw);
+//     };
+//   }, [isDrawing, lastX, lastY]);
 
   const styles = {
     font: {
@@ -179,6 +227,19 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
                 style={styles.colorPicker}
                 className="m-2 w-75"
                 onChange={(e) => {setPaused(e.target.checked);
+                console.log(e.target.checked);}}
+                />
+            </p>
+            </div>
+            <div className="row">
+            <p className="text-center" style={styles.font}>
+                Draw Mode:{" "}
+                <input
+                id="draw-mode"
+                type="checkbox"
+                style={styles.colorPicker}
+                className="m-2 w-75"
+                onChange={(e) => {setDrawMode(e.target.checked);
                 console.log(e.target.checked);}}
                 />
             </p>
