@@ -5,11 +5,11 @@ export default function TitleScreen({ color, alternateColor, shadowColor, highli
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const enterLightbox = () => {
-    setLightboxOpen(true);
-    const titleFontElement = document.querySelector('.titleFont');
-    titleFontElement.className = 'invisible';
+    setLightboxOpen(true);  
+  };
 
-    
+  const exitLightbox = () => {
+    setLightboxOpen(false);
   };
 
   const styles = {
@@ -25,7 +25,7 @@ export default function TitleScreen({ color, alternateColor, shadowColor, highli
     },
     titleFont: {
       fontFamily: 'Rampart One',
-      fontSize: '1000%',
+      fontSize: "calc(1.375rem + 8vw)",
       color: `${color}`,
       backgroundColor: highlightColor,
       textShadow: `5px 5px 10px ${shadowColor}`,
@@ -62,7 +62,9 @@ export default function TitleScreen({ color, alternateColor, shadowColor, highli
 
   return (
     <div className="container-fluid p-0" style={styles.background}>
-      <h1 className='titleFont p-5 text-center' style={styles.titleFont}>LightBox</h1>
+      {!lightboxOpen && (
+        <h1 className='titleFont p-5 text-center' style={styles.titleFont}>LightBox</h1>
+      )}
       {!lightboxOpen && (
         <button className='btn btn-lg' style={styles.button} onClick={enterLightbox}>
           Enter the lightbox...
@@ -70,7 +72,7 @@ export default function TitleScreen({ color, alternateColor, shadowColor, highli
       )}
       {lightboxOpen && (
         <div>
-          <BodyContainer color={color} alternateColor={alternateColor} shadowColor={shadowColor} highlightColor={highlightColor}/>
+          <BodyContainer lightboxOpen={lightboxOpen} exitLightbox={exitLightbox} color={color} alternateColor={alternateColor} shadowColor={shadowColor} highlightColor={highlightColor}/>
         </div>
       )}
     </div>

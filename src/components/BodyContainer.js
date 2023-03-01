@@ -1,11 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
+import { FiHome } from "react-icons/fi";
+import TitleScreen from "./TitleScreen";
+import Draggable, { DraggableCore } from "react-draggable";
 
-function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
+function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightboxOpen, exitLightbox }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastX, setLastX] = useState(0);
   const [lastY, setLastY] = useState(0);
-  const [lineColor, setLineColor] = useState("rgb(255 113 255)");
+  const [lineColor, setLineColor] = useState("#FF71FF");
   const [glowColor, setGlowColor] = useState("#000000");
   const [lineThickness, setLineThickness] = useState(50);
   const [glowBlur, setGlowBlur] = useState(15);
@@ -15,14 +18,21 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
   const [isClosed, setIsClosed] = useState(false);
   const [closeButton, setCloseButton] = useState("Close");
 
-    const handleClose = () => {
+  const goBack = () => {
+    exitLightbox();
+  }
+
+    const handleClose = (event) => {
+        event.stopPropagation();
         setIsClosed(!isClosed);
         setCloseButton(!isClosed ? "Open" : "Close");
-        const toolbarDivElement = document.querySelector('.toolbarDiv');
-        toolbarDivElement.className = !isClosed ? 'toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col- h-100 shadow-lg invisible' : 'toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col- h-100 shadow-lg visible';
-        const closeBtn = document.querySelector('.closeBtn');
-        closeBtn.className = !isClosed ? 'closeBtn m-3 btn btn-primary visible' : 'closeBtn text-center pb-2 visible';
-    }
+        //const toolbarDivElement = document.querySelector('.toolbarDiv');
+        //toolbarDivElement.className = !isClosed ? 'toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 h-100 shadow-lg invisible invisible' : 'toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 h-100 shadow-lg visible visible';
+        //toolbarDivElement.style.display = !isClosed ? 'block !important' : 'none !important';
+        //const closeBtn = document.querySelector('.closeBtn');
+        //closeBtn.className =!isClosed ? 'closeBtn m-3 btn btn-primary visible' : 'closeBtn text-center pb-2 visible';
+        //closeBtn.style.visibility = !isClosed ? 'visible !important' : 'visible !important';
+      }
 
     const handleDownload = () => {
 
@@ -78,10 +88,20 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
   useEffect(() => {
     if (isClosed) {
         const toolbar = document.querySelector('.toolbar');
-        toolbar.className = 'toolbar invisible  m-3 row shadow-lg';
+        toolbar.className = 'toolbar flex-grow-1 invisible  m-3 row shadow-lg';
+        const toolbarDivElement = document.querySelector('.toolbarDiv');
+        toolbarDivElement.className = 'toolbarDiv d-flex flex-column invisible';
+        const closeBtn = document.querySelector('.closeBtn');
+        closeBtn.className = "closeBtn m-3 btn btn-primary visible";
+
+
     } else {
         const toolbar = document.querySelector('.toolbar');
-        toolbar.className = 'toolbar visible m-3 row shadow-lg';
+        toolbar.className = 'toolbar flex-grow-1 visible m-3 row shadow-lg';
+        const toolbarDivElement = document.querySelector('.toolbarDiv');
+        toolbarDivElement.className = 'toolbarDiv d-flex flex-column visible';
+        const closeBtn = document.querySelector('.closeBtn');
+        closeBtn.className = "closeBtn text-center pb-2 visible";
     }
     }, [isClosed]);
 
@@ -190,6 +210,8 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
     },
     background: {
       backgroundColor: alternateColor,
+      height: "100%",
+      borderRadius: "15px",
     },
 
     colorPicker: {
@@ -201,129 +223,133 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
     },
   };
   return (
-    <div>
-        <div className="toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col- h-100 shadow-lg" style={styles.background}>
-            <h1 id="toolsTab" className="closeBtn text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor }}>Tools:
-            <button style={styles.fontAlt} className="closeBtn col-5 m-3 btn btn-primary" onClick={handleClose}>
-                {closeButton}
-                </button></h1>
-          <div className="toolbar m-3 row shadow-lg" style={{ overflowY: "scroll", webkitScrollbarColor: `${color} ${alternateColor}`, height: '80%' }}>
-            <div className="row">
-              <p className="text-center" style={styles.font}>
-                Line Color:{" "}
-                <input
-                  id="color-picker"
-                  type="color"
-                  value={lineColor}
-                  style={styles.colorPicker}
-                  className="m-2 w-75"
-                  onChange={(e) => setLineColor(e.target.value)}
-                />
-              </p>
-            </div>
-            <div className="row">
-              <p className="text-center" style={styles.font}>
-                Line Thickness:{" "}
-                <input
-                  id="thickness-picker"
-                  type="range"
-                  value={lineThickness}
-                  style={styles.colorPicker}
-                  className="m-2 w-75"
-                  onChange={(e) => setLineThickness(e.target.value)}
-                />
-              </p>
-            </div>
-            <div className="row">
-              <p className="text-center" style={styles.font}>
-                Glow Color:{" "}
-                <input
-                  id="glow-picker"
-                  type="color"
-                  value={glowColor}
-                  style={styles.colorPicker}
-                  className="m-2 w-75"
-                  onChange={(e) => setGlowColor(e.target.value)}
-                />
-              </p>
-            </div>
-            <div className="row">
-              <p className="text-center" style={styles.font}>
-                Glow Blur:{" "}
-                <input
-                  id="-glow-blur-picker"
-                  type="range"
-                  value={glowBlur}
-                  style={styles.colorPicker}
-                  className="m-2 w-75"
-                  onChange={(e) => setGlowBlur(e.target.value)}
-                />
-              </p>
-            </div>
-            <div className="row">
-              <p className="text-center" style={styles.font}>
-                Brush Shape:{" "}
-                <select
-                  id="brush-shape"
-                  style={styles.colorPicker}
-                  className="m-2 w-75"
-                  onChange={(e) => {
-                    setBrushShape(e.target.value);
-                    console.log(e.target.value);
-                  }}
-                >
-                  <option value="round">Round</option>
-                  <option value="square">Square</option>
-                  <option value="butt">Butt</option>
-                </select>
-              </p>
-            </div>
-            <div className="row">
-              <p className="text-center" style={styles.font}>
-                Pause:{" "}
-                <input
-                  id="pause"
-                  type="checkbox"
-                  style={styles.colorPicker}
-                  className="m-2 w-75"
-                  onChange={(e) => {
-                    setPaused(e.target.checked);
-                    console.log(e.target.checked);
-                  }}
-                />
-              </p>
-            </div>
-            <div className="row">
-              <p className="text-center" style={styles.font}>
-                Draw Mode:{" "}
-                <input
-                  id="draw-mode"
-                  type="checkbox"
-                  style={styles.colorPicker}
-                  className="m-2 w-75"
-                  onChange={(e) => {
-                    setDrawMode(e.target.checked);
-                    console.log(e.target.checked);
-                  }}
-                />
-              </p>
-            </div>
-            <div className="row">
-              <p className="text-center" style={styles.font}>
-                <button className="btn btn-primary container-fluid my-3 border-0" style={{ backgroundColor: color, boxShadow: `0 0 10px ${shadowColor}`, textShadow: "1px 1px 3px #000000" }} onClick={handleDownload}>
-                    Download Image
-                </button>
-              </p>
-            </div>
-            <div className="row">
+    <div className="lightbox">
+      <h1 onClick={goBack} style={{position: "absolute", right: "5%", top: "5%", color: color, fontSize: "84px" }}><FiHome /></h1>
+      <Draggable>
+        <div className="fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 h-100 shadow-lg">
+          <div className="toolbarDiv d-flex flex-column" style={styles.background}>
+              <h1 id="toolsTab" className="closeBtn text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor, borderTopLeftRadius: "10px", borderTopRightRadius: "10px", }}>Tools:
+              <button style={styles.fontAlt} className="closeBtn col-5 m-3 btn btn-primary" onClick={handleClose}>
+                  {closeButton}
+                  </button></h1>
+            <div className="toolbar m-3 row shadow-lg flex-grow-1" style={{ overflowY: "scroll" }}>
+              <div className="row">
                 <p className="text-center" style={styles.font}>
-                    <input id="files" type="file" name="image-upload" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
-                    <label htmlFor="files" className="btn btn-primary container-fluid my-3 border-0" style={{ backgroundColor: color, boxShadow: `0 0 10px ${shadowColor}`, textShadow: "1px 1px 3px #000000" }}>Upload Background</label>
+                  Line Color:{" "}
+                  <input
+                    id="color-picker"
+                    type="color"
+                    value={lineColor}
+                    style={styles.colorPicker}
+                    className="m-2 w-75"
+                    onChange={(e) => setLineColor(e.target.value)}
+                  />
                 </p>
-            </div>      
+              </div>
+              <div className="row">
+                <p className="text-center" style={styles.font}>
+                  Line Thickness:{" "}
+                  <input
+                    id="thickness-picker"
+                    type="range"
+                    value={lineThickness}
+                    style={styles.colorPicker}
+                    className="m-2 w-75"
+                    onChange={(e) => setLineThickness(e.target.value)}
+                  />
+                </p>
+              </div>
+              <div className="row">
+                <p className="text-center" style={styles.font}>
+                  Glow Color:{" "}
+                  <input
+                    id="glow-picker"
+                    type="color"
+                    value={glowColor}
+                    style={styles.colorPicker}
+                    className="m-2 w-75"
+                    onChange={(e) => setGlowColor(e.target.value)}
+                  />
+                </p>
+              </div>
+              <div className="row">
+                <p className="text-center" style={styles.font}>
+                  Glow Blur:{" "}
+                  <input
+                    id="-glow-blur-picker"
+                    type="range"
+                    value={glowBlur}
+                    style={styles.colorPicker}
+                    className="m-2 w-75"
+                    onChange={(e) => setGlowBlur(e.target.value)}
+                  />
+                </p>
+              </div>
+              <div className="row">
+                <p className="text-center" style={styles.font}>
+                  Brush Shape:{" "}
+                  <select
+                    id="brush-shape"
+                    style={styles.colorPicker}
+                    className="m-2 w-75"
+                    onChange={(e) => {
+                      setBrushShape(e.target.value);
+                      console.log(e.target.value);
+                    }}
+                  >
+                    <option value="round">Round</option>
+                    <option value="square">Square</option>
+                    <option value="butt">Butt</option>
+                  </select>
+                </p>
+              </div>
+              <div className="row">
+                <p className="text-center" style={styles.font}>
+                  Pause:{" "}
+                  <input
+                    id="pause"
+                    type="checkbox"
+                    style={styles.colorPicker}
+                    className="m-2 w-75"
+                    onChange={(e) => {
+                      setPaused(e.target.checked);
+                      console.log(e.target.checked);
+                    }}
+                  />
+                </p>
+              </div>
+              <div className="row">
+                <p className="text-center" style={styles.font}>
+                  Draw Mode:{" "}
+                  <input
+                    id="draw-mode"
+                    type="checkbox"
+                    style={styles.colorPicker}
+                    className="m-2 w-75"
+                    onChange={(e) => {
+                      setDrawMode(e.target.checked);
+                      console.log(e.target.checked);
+                    }}
+                  />
+                </p>
+              </div>
+              <div className="row">
+                <p className="text-center" style={styles.font}>
+                  <button className="btn btn-primary container-fluid my-3 border-0" style={{ backgroundColor: color, boxShadow: `0 0 10px ${shadowColor}`, textShadow: "1px 1px 3px #000000" }} onClick={handleDownload}>
+                      Download Image
+                  </button>
+                </p>
+              </div>
+              <div className="row">
+                  <p className="text-center" style={styles.font}>
+                      <input id="files" type="file" name="image-upload" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
+                      <label htmlFor="files" className="btn btn-primary container-fluid my-3 border-0" style={{ backgroundColor: color, boxShadow: `0 0 10px ${shadowColor}`, textShadow: "1px 1px 3px #000000" }}>Upload Background</label>
+                  </p>
+              </div>      
+            </div>
           </div>
-        </div>
-
+        </div>  
+      </Draggable>
       <canvas
         ref={canvasRef}
         width={window.innerWidth}
