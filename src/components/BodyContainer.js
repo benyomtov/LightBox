@@ -5,13 +5,24 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastX, setLastX] = useState(0);
   const [lastY, setLastY] = useState(0);
-  const [lineColor, setLineColor] = useState("#000000");
+  const [lineColor, setLineColor] = useState("rgb(255 113 255)");
   const [glowColor, setGlowColor] = useState("#000000");
   const [lineThickness, setLineThickness] = useState(50);
   const [glowBlur, setGlowBlur] = useState(15);
   const [paused, setPaused] = useState(false);
   const [drawMode, setDrawMode] = useState(false);
   const [brushShape, setBrushShape] = useState("round");
+  const [isClosed, setIsClosed] = useState(false);
+  const [closeButton, setCloseButton] = useState("Close");
+
+    const handleClose = () => {
+        setIsClosed(!isClosed);
+        setCloseButton(!isClosed ? "Open" : "Close");
+        const toolbarDivElement = document.querySelector('.toolbarDiv');
+        toolbarDivElement.className = !isClosed ? 'toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col- h-100 shadow-lg invisible' : 'toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col- h-100 shadow-lg visible';
+        const closeBtn = document.querySelector('.closeBtn');
+        closeBtn.className = !isClosed ? 'closeBtn m-3 btn btn-primary visible' : 'closeBtn text-center pb-2 visible';
+    }
 
     const handleDownload = () => {
 
@@ -63,6 +74,16 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
       clearInterval(interval);
     };
   }, [paused]);
+
+  useEffect(() => {
+    if (isClosed) {
+        const toolbar = document.querySelector('.toolbar');
+        toolbar.className = 'toolbar invisible  m-3 row shadow-lg';
+    } else {
+        const toolbar = document.querySelector('.toolbar');
+        toolbar.className = 'toolbar visible m-3 row shadow-lg';
+    }
+    }, [isClosed]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -146,13 +167,25 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
 
   const styles = {
     font: {
+        paddingTop: "10px",
       fontFamily: "Azeret Mono, monospace",
-      fontSize: "1vw",
+      fontSize: "16px",
       color: `${color}`,
       textShadow: `5px 5px 10px ${shadowColor}`,
       border: `3px solid ${color}`,
       boxShadow: `5px 5px 10px ${shadowColor}`,
       backgroundColor: highlightColor,
+      borderRadius: "10px",
+    },
+    fontAlt: {
+        paddingTop: "10px",
+      fontFamily: "Azeret Mono, monospace",
+      fontSize: "16px",
+      color: `${color}`,
+      textShadow: `5px 5px 10px ${shadowColor}`,
+      border: `3px solid ${color}`,
+      boxShadow: `5px 5px 10px ${shadowColor}`,
+      backgroundColor: alternateColor,
       borderRadius: "10px",
     },
     background: {
@@ -162,16 +195,19 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor }) {
     colorPicker: {
       border: `3px solid ${color}`,
       //   width: "10vw",
-      height: "3vw",
+      height: "60px",
 
       borderRadius: "10px",
     },
   };
   return (
     <div>
-        <div className="fixed-top col-2 h-100" style={styles.background}>
-            <h1 className="text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor }}>Tools:</h1>
-          <div className="m-3 row" style={{ overflowY: "scroll", height: "90%"}}>
+        <div className="toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col- h-100 shadow-lg" style={styles.background}>
+            <h1 id="toolsTab" className="closeBtn text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor }}>Tools:
+            <button style={styles.fontAlt} className="closeBtn col-5 m-3 btn btn-primary" onClick={handleClose}>
+                {closeButton}
+                </button></h1>
+          <div className="toolbar m-3 row shadow-lg" style={{ overflowY: "scroll", webkitScrollbarColor: `${color} ${alternateColor}`, height: '80%' }}>
             <div className="row">
               <p className="text-center" style={styles.font}>
                 Line Color:{" "}

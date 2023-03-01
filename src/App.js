@@ -1,10 +1,7 @@
 import React from 'react';
 import './App.css';
-import Header from './components/Header'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
-import Footer from './components/Footer';
-import BodyContainer from './components/BodyContainer';
 import TitleScreen from './components/TitleScreen';
 
 function App() {
@@ -33,9 +30,6 @@ function App() {
 
   return (
     <div className="container-fluid p-0">
-      {/* <Header color={color} alternateColor={alternateColor} shadowColor={shadowColor}/> */}
-      {/* <BodyContainer color={color} alternateColor={alternateColor} shadowColor={shadowColor} highlightColor={highlightColor}/> */}
-      {/* <Footer color={color} alternateColor={alternateColor} shadowColor={shadowColor}/> */}
       <TitleScreen color={color} alternateColor={alternateColor} shadowColor={shadowColor} highlightColor={highlightColor}/>
     </div>
   );
