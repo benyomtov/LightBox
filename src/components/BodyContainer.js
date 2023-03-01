@@ -17,6 +17,17 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
   const [brushShape, setBrushShape] = useState("round");
   const [isClosed, setIsClosed] = useState(false);
   const [closeButton, setCloseButton] = useState("Close");
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const handleRangeClick = (e) => {
+    e.stopPropagation();
+    setIsDisabled(true);
+  };
+
+  const handleMouseUp = (e) => {
+    e.stopPropagation();
+    setIsDisabled(false);
+  };
 
   const goBack = () => {
     exitLightbox();
@@ -232,7 +243,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
   return (
     <div className="lightbox">
       <h1 onClick={goBack} style={{position: "absolute", right: "5%", top: "5%", color: color, fontSize: "84px" }}><FiHome /></h1>
-      <Draggable>
+      <Draggable disabled={isDisabled}>
         <div style= {{ height: "90%", borderRadius: "15px", backgroundColor: alternateColor }} className="toolResize fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 shadow-lg">
           <div className="toolbarDiv d-flex flex-column" style={styles.background}>
               <h1 id="toolsTab" className="closeBtn text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor, borderTopLeftRadius: "10px", borderTopRightRadius: "10px", }}>Tools:
@@ -261,8 +272,10 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
                     type="range"
                     value={lineThickness}
                     style={styles.colorPicker}
-                    className="m-2 w-75"
+                    className="range m-2 w-75"
                     onChange={(e) => setLineThickness(e.target.value)}
+                    onMouseDown={handleRangeClick}
+                    onMouseUp={handleMouseUp}
                   />
                 </p>
               </div>
@@ -287,8 +300,10 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
                     type="range"
                     value={glowBlur}
                     style={styles.colorPicker}
-                    className="m-2 w-75"
+                    className="range m-2 w-75"
                     onChange={(e) => setGlowBlur(e.target.value)}
+                    onMouseDown={handleRangeClick}
+                    onMouseUp={handleMouseUp}
                   />
                 </p>
               </div>
