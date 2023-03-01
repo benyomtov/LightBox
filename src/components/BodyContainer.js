@@ -93,8 +93,10 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
         toolbarDivElement.className = 'toolbarDiv d-flex flex-column invisible';
         const closeBtn = document.querySelector('.closeBtn');
         closeBtn.className = "closeBtn m-3 btn btn-primary visible";
-
-
+        const toolResize = document.querySelector('.toolResize');
+        toolResize.style.height = '230px';
+        const toolBorder = document.getElementById('toolsTab');
+        toolBorder.style.border= `5px solid ${color}`;
     } else {
         const toolbar = document.querySelector('.toolbar');
         toolbar.className = 'toolbar flex-grow-1 visible m-3 row shadow-lg';
@@ -102,6 +104,11 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
         toolbarDivElement.className = 'toolbarDiv d-flex flex-column visible';
         const closeBtn = document.querySelector('.closeBtn');
         closeBtn.className = "closeBtn text-center pb-2 visible";
+        const toolResize = document.querySelector('.toolResize');
+        toolResize.style.height = '90%';
+        const toolBorder = document.getElementById('toolsTab');
+        toolBorder.style.border= 'none';
+        toolBorder.style.borderBottom=`5px solid ${color}`;
     }
     }, [isClosed]);
 
@@ -226,7 +233,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
     <div className="lightbox">
       <h1 onClick={goBack} style={{position: "absolute", right: "5%", top: "5%", color: color, fontSize: "84px" }}><FiHome /></h1>
       <Draggable>
-        <div className="fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 h-100 shadow-lg">
+        <div style= {{ height: "90%", borderRadius: "15px", backgroundColor: alternateColor }} className="toolResize fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 shadow-lg">
           <div className="toolbarDiv d-flex flex-column" style={styles.background}>
               <h1 id="toolsTab" className="closeBtn text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor, borderTopLeftRadius: "10px", borderTopRightRadius: "10px", }}>Tools:
               <button style={styles.fontAlt} className="closeBtn col-5 m-3 btn btn-primary" onClick={handleClose}>
