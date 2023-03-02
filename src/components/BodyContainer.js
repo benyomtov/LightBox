@@ -204,7 +204,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
       var touches = evt.changedTouches;
       for (var i = 0; i < touches.length; i++) {
         var touch = touches[i];
-        if (drawMode) {
+        if (mobileMode) {
           setIsDrawing(true);
           setLastX(touch.clientX);
           setLastY(touch.clientY);
