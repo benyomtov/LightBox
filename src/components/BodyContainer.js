@@ -237,6 +237,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
     lastY,
     drawMode,
     brushShape,
+    mobileMode,
   ]);
 
   const styles = {
