@@ -19,6 +19,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
   const [closeButton, setCloseButton] = useState("Close");
   const [isDisabled, setIsDisabled] = useState(false);
   const [mobileMode, setMobileMode] = useState(false);
+  const [toolTag, setToolTag] = useState("Tools:");
 
   const handleRangeClick = (e) => {
     e.stopPropagation();
@@ -38,12 +39,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
         event.stopPropagation();
         setIsClosed(!isClosed);
         setCloseButton(!isClosed ? "Open" : "Close");
-        //const toolbarDivElement = document.querySelector('.toolbarDiv');
-        //toolbarDivElement.className = !isClosed ? 'toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 h-100 shadow-lg invisible invisible' : 'toolbarDiv fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 h-100 shadow-lg visible visible';
-        //toolbarDivElement.style.display = !isClosed ? 'block !important' : 'none !important';
-        //const closeBtn = document.querySelector('.closeBtn');
-        //closeBtn.className =!isClosed ? 'closeBtn m-3 btn btn-primary visible' : 'closeBtn text-center pb-2 visible';
-        //closeBtn.style.visibility = !isClosed ? 'visible !important' : 'visible !important';
+        setToolTag(isClosed ? "Tools:" : "");
       }
 
     const handleDownload = () => {
@@ -104,9 +100,10 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
         const toolbarDivElement = document.querySelector('.toolbarDiv');
         toolbarDivElement.className = 'toolbarDiv d-flex flex-column invisible';
         const closeBtn = document.querySelector('.closeBtn');
-        closeBtn.className = "closeBtn m-3 btn btn-primary visible";
+        closeBtn.className = "closeBtn btn btn-primary visible";
+        closeBtn.style.lineHeight = '10px';
         const toolResize = document.querySelector('.toolResize');
-        toolResize.style.height = '230px';
+        toolResize.style.height = '80px';
         const toolBorder = document.getElementById('toolsTab');
         toolBorder.style.border= `5px solid ${color}`;
     } else {
@@ -116,6 +113,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
         toolbarDivElement.className = 'toolbarDiv d-flex flex-column visible';
         const closeBtn = document.querySelector('.closeBtn');
         closeBtn.className = "closeBtn text-center pb-2 visible";
+        closeBtn.style.lineHeight = '60px';
         const toolResize = document.querySelector('.toolResize');
         toolResize.style.height = '90%';
         const toolBorder = document.getElementById('toolsTab');
@@ -279,13 +277,13 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
   };
   return (
     <div className="lightbox">
-      <h1 onClick={goBack} style={{position: "absolute", right: "5%", top: "5%", color: color, fontSize: "84px" }}><FiHome /></h1>
+      <h1 className="display-1" onClick={goBack} style={{position: "absolute", right: "10%", top: "5%", color: color }}><FiHome /></h1>
       <Draggable handle=".handle" disabled={isDisabled}>
-        <div style= {{ height: "90%", borderRadius: "15px", backgroundColor: alternateColor }} className="toolResize fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 shadow-lg">
+        <div style= {{ height: "90%", borderRadius: "15px", backgroundColor: "none" }} className="toolResize fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 shadow-lg">
           <div className="toolbarDiv d-flex flex-column" style={styles.background}>
               <h1 id="toolsTab" className="closeBtn text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor, borderTopLeftRadius: "10px", borderTopRightRadius: "10px", }}>
-                Tools:
-              <button style={styles.fontAlt} className="closeBtn col-5 m-2 btn btn-primary" onClick={handleClose}>
+                {toolTag}
+              <button style={styles.fontAlt} className="col-6 m-1 btn btn-primary" onClick={handleClose}>
                   {closeButton}
                   </button>
                   <button className="handle btn btn-primary" style={ styles.fontAlt }>Drag

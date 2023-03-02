@@ -6,10 +6,10 @@ import TitleScreen from './components/TitleScreen';
 
 function App() {
 
-  const [color, setColor] = useState('#000000');
-    const [alternateColor, setAlternateColor] = useState('#FFFFFF');
-    const [shadowColor, setShadowColor] = useState('#000000');
-    const [highlightColor, setHighlightColor] = useState('#FFFFFF');
+  const [color, setColor] = useState('#7fff87');
+    const [alternateColor, setAlternateColor] = useState('#FF6775');
+    const [shadowColor, setShadowColor] = useState('#fd11ff');
+    const [highlightColor, setHighlightColor] = useState('#ff09ff');
 
     useEffect(() => {
     const onMouseMove = (event) => {
