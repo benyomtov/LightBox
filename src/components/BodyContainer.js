@@ -243,14 +243,18 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
   return (
     <div className="lightbox">
       <h1 onClick={goBack} style={{position: "absolute", right: "5%", top: "5%", color: color, fontSize: "84px" }}><FiHome /></h1>
-      <Draggable disabled={isDisabled}>
+      <Draggable handle=".handle" disabled={isDisabled}>
         <div style= {{ height: "90%", borderRadius: "15px", backgroundColor: alternateColor }} className="toolResize fixed-top col-6 col-xl-2 col-xxl-2 col-lg-3 col-md-4 col-sm-5 col-7 shadow-lg">
           <div className="toolbarDiv d-flex flex-column" style={styles.background}>
-              <h1 id="toolsTab" className="closeBtn text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor, borderTopLeftRadius: "10px", borderTopRightRadius: "10px", }}>Tools:
-              <button style={styles.fontAlt} className="closeBtn col-5 m-3 btn btn-primary" onClick={handleClose}>
+              <h1 id="toolsTab" className="closeBtn text-center pb-2" style={{fontFamily: "Rampart One", color: color, textShadow: `5px 5px 10px ${shadowColor}`, fontSize: "56px", borderBottom: `5px solid ${color}`, boxShadow: `0 0 10px ${shadowColor}`, backgroundColor: highlightColor, borderTopLeftRadius: "10px", borderTopRightRadius: "10px", }}>
+                Tools:
+              <button style={styles.fontAlt} className="closeBtn col-5 m-2 btn btn-primary" onClick={handleClose}>
                   {closeButton}
-                  </button></h1>
-            <div className="toolbar m-3 row shadow-lg flex-grow-1" style={{ overflowY: "scroll" }}>
+                  </button>
+                  <button className="handle btn btn-primary" style={ styles.fontAlt }>Drag
+                  </button>
+                  </h1>
+            <div className="toolbar m-2 row shadow-lg flex-grow-1" style={{ overflowY: "scroll" }}>
               <div className="row">
                 <p className="text-center" style={styles.font}>
                   Line Color:{" "}
