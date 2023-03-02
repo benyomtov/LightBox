@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/LightBox/static/css/main.c2cab247.css",
-    "main.js": "/LightBox/static/js/main.e0259119.js",
+    "main.js": "/LightBox/static/js/main.ae32a746.js",
     "index.html": "/LightBox/index.html",
     "main.c2cab247.css.map": "/LightBox/static/css/main.c2cab247.css.map",
-    "main.e0259119.js.map": "/LightBox/static/js/main.e0259119.js.map"
+    "main.ae32a746.js.map": "/LightBox/static/js/main.ae32a746.js.map"
   },
   "entrypoints": [
     "static/css/main.c2cab247.css",
-    "static/js/main.e0259119.js"
+    "static/js/main.ae32a746.js"
   ]
 }
