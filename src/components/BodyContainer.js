@@ -18,6 +18,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
   const [isClosed, setIsClosed] = useState(false);
   const [closeButton, setCloseButton] = useState("Close");
   const [isDisabled, setIsDisabled] = useState(false);
+  const [mobileMode, setMobileMode] = useState(false);
 
   const handleRangeClick = (e) => {
     e.stopPropagation();
@@ -137,9 +138,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
     function draw(e) {
       if (!isDrawing) return;
       if (
-        e.type === "mousemove" ||
-        e.type === "mouseenter" ||
-        e.type === "mousedown"
+        (e.type === "mousemove") && (!mobileMode)
       ) {
         context.beginPath();
         context.moveTo(lastX, lastY);
@@ -147,14 +146,30 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
         context.stroke();
         setLastX(e.offsetX);
         setLastY(e.offsetY);
-      }
+      } else if (
+        (e.type === "touchmove") && (mobileMode)
+      ) {
+        var touches = e.changedTouches;
+        for (var i = 0; i < touches.length; i++) {
+          var touch = touches[i];
+          context.beginPath();
+          context.moveTo(lastX, lastY);
+          context.lineTo(touch.clientX, touch.clientY);
+          context.stroke();
+          setLastX(touch.clientX);
+          setLastY(touch.clientY);
+        }
+      }  
     }
 
     canvas.addEventListener("mouseenter", handleMouseEnter);
-    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mousemove", handleMove);
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mouseup", handleMouseUp);
     canvas.addEventListener("mouseout", handleMouseOut);
+    canvas.addEventListener("touchstart", handleTouchStart);
+    canvas.addEventListener("touchend", handleTouchEnd);
+    canvas.addEventListener("touchmove", handleMove);
 
     function handleMouseEnter(e) {
       if (!drawMode) {
@@ -164,7 +179,7 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
       } else return;
     }
 
-    function handleMouseMove(e) {
+    function handleMove(e) {
       draw(e);
     }
 
@@ -184,13 +199,34 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
       setIsDrawing(false);
     }
 
+    function handleTouchStart(evt) {
+      evt.preventDefault();
+      var touches = evt.changedTouches;
+      for (var i = 0; i < touches.length; i++) {
+        var touch = touches[i];
+        if (drawMode) {
+          setIsDrawing(true);
+          setLastX(touch.clientX);
+          setLastY(touch.clientY);
+        } else return;
+      }
+    }
+
+    function handleTouchEnd() {
+      if (mobileMode) setIsDrawing(false);
+    }
+
     return () => {
       canvas.removeEventListener("mouseenter", handleMouseEnter);
-      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mousemove", handleMove);
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseout", handleMouseOut);
+      canvas.removeEventListener("touchstart", handleTouchStart);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      canvas.removeEventListener("touchmove", handleMove);
     };
+  
   }, [
     lineColor,
     glowColor,
@@ -354,6 +390,21 @@ function DrawOnDiv({ color, alternateColor, shadowColor, highlightColor, lightbo
                     className="m-2 w-75"
                     onChange={(e) => {
                       setDrawMode(e.target.checked);
+                      console.log(e.target.checked);
+                    }}
+                  />
+                </p>
+              </div>
+              <div className="row">
+                <p className="text-center" style={styles.font}>
+                  Mobile Mode:{" "}
+                  <input
+                    id="mobile-mode"
+                    type="checkbox"
+                    style={styles.colorPicker}
+                    className="m-2 w-75"
+                    onChange={(e) => {
+                      setMobileMode(e.target.checked);
                       console.log(e.target.checked);
                     }}
                   />
